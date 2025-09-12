@@ -1,5 +1,7 @@
 project(hyprqtplugin)
 
+find_package(Qt6 REQUIRED COMPONENTS Gui GuiPrivate)
+
 set(app_SRCS
   main.cpp
   PlatformTheme.cpp
