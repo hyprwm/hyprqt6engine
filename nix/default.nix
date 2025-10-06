@@ -36,6 +36,5 @@ stdenv.mkDerivation {
     description = "Qt6 theme provider for Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    mainProgram = "hyprlock";
   };
 }
