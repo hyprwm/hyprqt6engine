@@ -2,15 +2,19 @@
   lib,
   inputs,
   self,
-}: let
-  mkDate = longDate: (lib.concatStringsSep "-" [
-    (builtins.substring 0 4 longDate)
-    (builtins.substring 4 2 longDate)
-    (builtins.substring 6 2 longDate)
-  ]);
+}:
+let
+  mkDate =
+    longDate:
+    (lib.concatStringsSep "-" [
+      (builtins.substring 0 4 longDate)
+      (builtins.substring 4 2 longDate)
+      (builtins.substring 6 2 longDate)
+    ]);
 
   version = lib.removeSuffix "\n" (builtins.readFile ../VERSION);
-in {
+in
+{
   default = inputs.self.overlays.hyprqt6engine;
 
   hyprqt6engine = lib.composeManyExtensions [

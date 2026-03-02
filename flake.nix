@@ -21,33 +21,36 @@
     };
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    systems,
-    ...
-  }: let
-    inherit (nixpkgs) lib;
-    eachSystem = lib.genAttrs (import systems);
-    pkgsFor = eachSystem (
-      system:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      systems,
+      ...
+    }:
+    let
+      inherit (nixpkgs) lib;
+      eachSystem = lib.genAttrs (import systems);
+      pkgsFor = eachSystem (
+        system:
         import nixpkgs {
           localSystem.system = system;
           overlays = with self.overlays; [
             hyprqt6engine
           ];
         }
-    );
-  in {
-    overlays = import ./nix/overlays.nix {inherit self lib inputs;};
+      );
+    in
+    {
+      overlays = import ./nix/overlays.nix { inherit self lib inputs; };
 
-    packages = eachSystem (system: {
-      default = self.packages.${system}.hyprqt6engine;
-      inherit (pkgsFor.${system}) hyprqt6engine;
-    });
+      packages = eachSystem (system: {
+        default = self.packages.${system}.hyprqt6engine;
+        inherit (pkgsFor.${system}) hyprqt6engine;
+      });
 
-    checks = eachSystem (system: self.packages.${system});
+      checks = eachSystem (system: self.packages.${system});
 
-    formatter = eachSystem (system: pkgsFor.${system}.alejandra);
-  };
+      formatter = eachSystem (system: pkgsFor.${system}.nixfmt-tree);
+    };
 }
