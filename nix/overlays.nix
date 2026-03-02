@@ -17,20 +17,21 @@ in
 {
   default = inputs.self.overlays.hyprqt6engine;
 
-  hyprqt6engine = lib.composeManyExtensions [
+  hyprqt6engine-with-deps = lib.composeManyExtensions [
     inputs.hyprlang.overlays.default
     inputs.hyprutils.overlays.default
-    (final: prev: {
-      hyprqt6engine = prev.callPackage ./default.nix {
-        stdenv = prev.gcc15Stdenv;
-        version =
-          version
-          + "+date="
-          + (mkDate (inputs.self.lastModifiedDate or "19700101"))
-          + "_"
-          + (inputs.self.shortRev or "dirty");
-        inherit (final) hyprlang hyprutils;
-      };
-    })
+    self.overlays.hyprqt6engine
   ];
+
+  hyprqt6engine = final: prev: {
+    hyprqt6engine = prev.callPackage ./default.nix {
+      stdenv = prev.gcc15Stdenv;
+      version =
+        version
+        + "+date="
+        + (mkDate (inputs.self.lastModifiedDate or "19700101"))
+        + "_"
+        + (inputs.self.shortRev or "dirty");
+    };
+  };
 }

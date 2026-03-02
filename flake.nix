@@ -35,9 +35,7 @@
         system:
         import nixpkgs {
           localSystem.system = system;
-          overlays = with self.overlays; [
-            hyprqt6engine
-          ];
+          overlays = with self.overlays; [ hyprqt6engine-with-deps ];
         }
       );
     in
