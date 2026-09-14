@@ -8,7 +8,7 @@ project(hyprqt6engine VERSION ${VER} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.9 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets)
+find_package(Qt6 6.9 CONFIG REQUIRED COMPONENTS Core)
 find_package(PkgConfig REQUIRED)
 find_package(KF6Config)
 find_package(KF6ColorScheme)

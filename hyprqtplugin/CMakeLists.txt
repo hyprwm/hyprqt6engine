@@ -1,6 +1,6 @@
 project(hyprqtplugin)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui GuiPrivate)
+find_package(Qt6 REQUIRED COMPONENTS Gui GuiPrivate QuickControls2 Widgets WidgetsPrivate)
 
 set(app_SRCS
   main.cpp
@@ -10,6 +10,6 @@ set(app_SRCS
 
 add_library(hyprqtplugin MODULE ${app_SRCS})
 set_target_properties(hyprqtplugin PROPERTIES OUTPUT_NAME hyprqt6engine)
-target_link_libraries(hyprqtplugin PRIVATE $<TARGET_NAME_IF_EXISTS:Qt6::WidgetsPrivate> Qt6::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt6::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF6::IconThemes> hyprutils hyprlang hyprqt6engine-common)
+target_link_libraries(hyprqtplugin PRIVATE $<TARGET_NAME_IF_EXISTS:Qt6::Widgets> $<TARGET_NAME_IF_EXISTS:Qt6::WidgetsPrivate> Qt6::GuiPrivate $<TARGET_NAME_IF_EXISTS:Qt6::QuickControls2> $<TARGET_NAME_IF_EXISTS:KF6::IconThemes> hyprutils hyprlang hyprqt6engine-common)
 target_compile_definitions(hyprqtplugin PRIVATE $<$<TARGET_EXISTS:KF6::IconThemes>:KF_ICONTHEMES_LIB>)
 install(TARGETS hyprqtplugin DESTINATION ${PLUGINDIR}/platformthemes)
