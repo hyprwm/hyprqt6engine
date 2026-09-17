@@ -8,10 +8,15 @@
 #endif
 #include <QObject>
 #include <QFont>
-#include <QPalette>
-#include <QLoggingCategory>
+// #include <QPalette>
+// #include <QLoggingCategory>
 #include <QIcon>
 #include <QFileInfo>
+#ifdef QT_WIDGETS_LIB
+#include <QStyle>
+#endif
+
+#include "common.hpp"
 
 class CHyprPlatformTheme : public QObject, public QGenericUnixTheme {
     Q_OBJECT
@@ -25,6 +30,9 @@ class CHyprPlatformTheme : public QObject, public QGenericUnixTheme {
     //virtual void showPlatformMenuBar() {}
     virtual bool                   usePlatformNativeDialog(DialogType type) const override;
     virtual QPlatformDialogHelper* createPlatformDialogHelper(DialogType type) const override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    virtual Qt::ColorScheme colorScheme() const override;
+#endif
     virtual const QPalette*        palette(Palette type = SystemPalette) const override;
     virtual const QFont*           font(Font type = SystemFont) const override;
     virtual QVariant               themeHint(ThemeHint hint) const override;
@@ -42,19 +50,36 @@ class CHyprPlatformTheme : public QObject, public QGenericUnixTheme {
   protected:
     bool eventFilter(QObject* obj, QEvent* e) override;
 
-  private slots:
+private slots:
     void applySettings();
+    void createFSWatcher();
+    void updateSettings();
 
-  private:
+private:
+    void readSettings();
 #ifdef QT_WIDGETS_LIB
     bool hasWidgets();
 #endif
-    QString                         loadStyleSheets(const QStringList& paths);
-    QString                         m_prevStyleSheet;
-    QFont                           m_fixedFont, m_font;
-    std::optional<QPalette>         m_palette;
-    bool                            m_update    = false;
-    bool                            m_isIgnored = false;
+    QString loadStyleSheets(const QStringList &paths);
+    QString m_schemePath, m_iconTheme, m_userStyleSheet, m_prevStyleSheet;
+    std::optional<QPalette> m_palette;
+    QFont m_font, m_fixedFont;
+    int m_doubleClickInterval;
+    int m_cursorFlashTime;
+    int m_uiEffects;
+    int m_buttonBoxLayout;
+    int m_keyboardScheme;
+    int m_toolButtonStyle;
+    int m_wheelScrollLines;
+    bool m_showShortcutsInContextMenus;
+    bool m_showIconsInMenus;
+    bool m_isIgnored = false;
+    bool m_update = false;
+    mutable bool m_inColorScheme = false;
     std::unique_ptr<QPlatformTheme> m_theme;
+#ifdef QT_WIDGETS_LIB
+    std::unique_ptr<QStyle> m_style;
+#endif
 };
 
+// Q_DECLARE_LOGGING_CATEGORY(hypr)

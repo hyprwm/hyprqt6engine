@@ -21,7 +21,7 @@ class CHyprQT6EngineThemePlugin : public QPlatformThemePlugin {
                        v.majorVersion(), v.minorVersion());
         }
 
-        if (key.toLower() == QLatin1String("hyprqt6engine"))
+        if (key.toLower() == "hyprqt6engine"_L1)
             return new CHyprPlatformTheme();
         return nullptr;
     }

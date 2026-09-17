@@ -8,6 +8,8 @@ class CConfigManager {
   public:
     CConfigManager();
     void init();
+    void refresh();
+    static std::string getMainConfigPath();
 
     template <typename T>
     Hyprlang::CSimpleConfigValue<T> getValue(const std::string& name) {
