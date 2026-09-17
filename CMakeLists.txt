@@ -7,8 +7,12 @@ string(STRIP ${VER_RAW} VER)
 project(hyprqt6engine VERSION ${VER} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
-find_package(Qt6 6.9 CONFIG REQUIRED COMPONENTS Core)
+find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core OPTIONAL_COMPONENTS Widgets QuickControls2)
+if(Qt6_VERSION VERSION_GREATER_EQUAL 6.10)
+    find_package(Qt6 6.10 CONFIG REQUIRED COMPONENTS GuiPrivate OPTIONAL_COMPONENTS WidgetsPrivate)
+endif()
 find_package(PkgConfig REQUIRED)
 find_package(KF6Config)
 find_package(KF6ColorScheme)
