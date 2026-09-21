@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qpa/qplatformtheme.h>
+#include <qpa/qplatformdialoghelper.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 10, 0))
 #include <private/qgenericunixtheme_p.h>
 #else
@@ -64,15 +65,15 @@ private:
     QString m_schemePath, m_iconTheme, m_userStyleSheet, m_prevStyleSheet;
     std::optional<QPalette> m_palette;
     QFont m_font, m_fixedFont;
-    int m_doubleClickInterval;
-    int m_cursorFlashTime;
-    int m_uiEffects;
-    int m_buttonBoxLayout;
-    int m_keyboardScheme;
-    int m_toolButtonStyle;
-    int m_wheelScrollLines;
-    bool m_showShortcutsInContextMenus;
-    bool m_showIconsInMenus;
+    // int m_doubleClickInterval;
+    // int m_cursorFlashTime;
+    // int m_uiEffects;
+    // int m_wheelScrollLines;
+    int m_buttonBoxLayout = QPlatformDialogHelper::WinLayout;
+    int m_keyboardScheme = QPlatformTheme::KdeKeyboardScheme;
+    int m_toolButtonStyle = Qt::ToolButtonFollowStyle;
+    bool m_showShortcutsInContextMenus = true;
+    bool m_showIconsInMenus = true;
     bool m_isIgnored = false;
     bool m_update = false;
     mutable bool m_inColorScheme = false;
