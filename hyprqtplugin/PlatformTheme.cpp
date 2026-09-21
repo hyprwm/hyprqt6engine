@@ -71,7 +71,6 @@
 // #include "helpers/MiscFunctions.hpp"
 // #include "helpers/Log.hpp"
 
-
 //QT_QPA_PLATFORMTHEME=hyprqt6engine
 
 CHyprPlatformTheme::CHyprPlatformTheme() : m_font(*QGenericUnixTheme::font(QPlatformTheme::SystemFont)), m_fixedFont(*QGenericUnixTheme::font(QPlatformTheme::FixedFont)) {
@@ -88,15 +87,15 @@ CHyprPlatformTheme::CHyprPlatformTheme() : m_font(*QGenericUnixTheme::font(QPlat
 #endif
 #ifdef QT_WIDGETS_LIB
         if (hasWidgets()) {
-          //style could use various interfaces aren't initialized yet
-          QTimer::singleShot(0, this, [this] {
-            m_style.reset(QStyleFactory::create(u"hypr-style"_s));
-            applySettings();
-          });
+            //style could use various interfaces aren't initialized yet
+            QTimer::singleShot(0, this, [this] {
+                m_style.reset(QStyleFactory::create(u"hypr-style"_s));
+                applySettings();
+            });
 #ifdef QT_QUICKCONTROLS2_LIB
-          //don't override the value explicitly set by the user
-          if (QQuickStyle::name().isEmpty() || QQuickStyle::name() == "Fusion"_L1)
-            QQuickStyle::setStyle("org.kde.desktop"_L1);
+            //don't override the value explicitly set by the user
+            if (QQuickStyle::name().isEmpty() || QQuickStyle::name() == "Fusion"_L1)
+                QQuickStyle::setStyle("org.kde.desktop"_L1);
 #endif
         }
 #endif
@@ -125,7 +124,7 @@ Qt::ColorScheme CHyprPlatformTheme::colorScheme() const {
 #ifdef QT_WIDGETS_LIB
     //follow QApplicationPrivate::basePalette() logic
     QPalette palette = m_style ? m_style->standardPalette() : Qt::gray;
-    if (const QPalette *themePalette = this->palette())
+    if (const QPalette* themePalette = this->palette())
         palette = themePalette->resolve(palette);
     palette.setResolveMask(0);
     if (m_style)
@@ -136,11 +135,9 @@ Qt::ColorScheme CHyprPlatformTheme::colorScheme() const {
 #endif
     m_inColorScheme = false;
 
-    return palette.windowText().color().lightness() > palette.window().color().lightness()
-        ? Qt::ColorScheme::Dark
-        : palette.windowText().color().lightness() < palette.window().color().lightness()
-        ? Qt::ColorScheme::Light
-        : QGenericUnixTheme::colorScheme();
+    return palette.windowText().color().lightness() > palette.window().color().lightness() ? Qt::ColorScheme::Dark :
+        palette.windowText().color().lightness() < palette.window().color().lightness()    ? Qt::ColorScheme::Light :
+                                                                                             QGenericUnixTheme::colorScheme();
 }
 #endif
 
@@ -221,16 +218,16 @@ void CHyprPlatformTheme::applySettings() {
     //load dialogs
     if (!m_update) {
         //do not mix gtk2 style and gtk3 dialogs
-        QStringList keys = QPlatformThemeFactory::keys();
-        QString dialogs = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:dialogs");
-        QString style = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:style");
+        QStringList keys    = QPlatformThemeFactory::keys();
+        QString     dialogs = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:dialogs");
+        QString     style   = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:style");
 
         if (style.endsWith(u"gtk2"_s) && dialogs == "gtk3"_L1)
             dialogs = u"gtk2"_s;
         if (keys.contains(dialogs))
             m_theme.reset(QPlatformThemeFactory::create(dialogs));
     }
-    
+
 #if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
     if (CHyprStyle::isKColorScheme(m_schemePath))
         qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
@@ -239,18 +236,18 @@ void CHyprPlatformTheme::applySettings() {
 #endif
 
 #ifdef QT_WIDGETS_LIB
-    if(hasWidgets()) {
-        if(m_update) {
-            if(FontHash *hash = qt_app_fonts_hash(); hash && hash->size())
+    if (hasWidgets()) {
+        if (m_update) {
+            if (FontHash* hash = qt_app_fonts_hash(); hash && hash->size())
                 hash->clear();
             CHyprStyle::reloadStyleInstanceSettings();
         }
 
-        if(m_userStyleSheet != m_prevStyleSheet) {
+        if (m_userStyleSheet != m_prevStyleSheet) {
             // prepend our stylesheet to that of the application
             // (first removing any previous stylesheet we have set)
             QString appStyleSheet = qApp->styleSheet();
-            int prevIndex = appStyleSheet.indexOf(m_prevStyleSheet);
+            int     prevIndex     = appStyleSheet.indexOf(m_prevStyleSheet);
             if (prevIndex >= 0) {
                 appStyleSheet.remove(prevIndex, m_prevStyleSheet.size());
                 qApp->setStyleSheet(m_userStyleSheet + appStyleSheet);
@@ -273,8 +270,8 @@ void CHyprPlatformTheme::applySettings() {
             QCoreApplication::postEvent(scene, new QEvent(QEvent::ApplicationFontChange));
 #endif
         for (QWidget* w : QApplication::allWidgets()) {
-          QCoreApplication::postEvent(w, new QEvent(QEvent::ThemeChange));
-          w->update();
+            QCoreApplication::postEvent(w, new QEvent(QEvent::ThemeChange));
+            w->update();
         }
     }
 #endif
@@ -284,10 +281,10 @@ void CHyprPlatformTheme::applySettings() {
 
 void CHyprPlatformTheme::createFSWatcher() {
     static const QString configPath = QString::fromStdString(CConfigManager::getMainConfigPath());
-    QFileSystemWatcher *watcher = new QFileSystemWatcher(this);
+    QFileSystemWatcher*  watcher    = new QFileSystemWatcher(this);
     watcher->addPath(configPath);
 
-    QTimer *timer = new QTimer(this);
+    QTimer* timer = new QTimer(this);
     timer->setSingleShot(true);
     timer->setInterval(3000);
     connect(watcher, &QFileSystemWatcher::fileChanged, timer, qOverload<>(&QTimer::start));
@@ -295,8 +292,8 @@ void CHyprPlatformTheme::createFSWatcher() {
 }
 
 void CHyprPlatformTheme::updateSettings() {
-  readSettings();
-  applySettings();
+    readSettings();
+    applySettings();
 }
 
 void CHyprPlatformTheme::readSettings() {
@@ -305,58 +302,57 @@ void CHyprPlatformTheme::readSettings() {
 
     g_pConfigManager->refresh();
 
-    QString font_fixed = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font_fixed");
-    int font_fixed_size = *g_pConfigManager->getValue<Hyprlang::INT>("theme:font_fixed_size");
+    QString font_fixed       = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font_fixed");
+    int     font_fixed_size  = *g_pConfigManager->getValue<Hyprlang::INT>("theme:font_fixed_size");
     QString font_fixed_style = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font_fixed_style");
 
-    QString font = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font");
-    int font_size = *g_pConfigManager->getValue<Hyprlang::INT>("theme:font_size");
+    QString font       = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font");
+    int     font_size  = *g_pConfigManager->getValue<Hyprlang::INT>("theme:font_size");
     QString font_style = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:font_style");
 
     m_schemePath = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:color_scheme");
-    m_palette = CHyprStyle::loadColorScheme(m_schemePath);
-    m_iconTheme = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:icon_theme");
-    
-    m_font = *QGenericUnixTheme::font(QPlatformTheme::SystemFont);
-    m_fixedFont = *QGenericUnixTheme::font(QPlatformTheme::FixedFont);
-    m_keyboardScheme = QGenericUnixTheme::themeHint(QPlatformTheme::KeyboardScheme).toInt();
+    m_palette    = CHyprStyle::loadColorScheme(m_schemePath);
+    m_iconTheme  = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:icon_theme");
+
+    m_font            = *QGenericUnixTheme::font(QPlatformTheme::SystemFont);
+    m_fixedFont       = *QGenericUnixTheme::font(QPlatformTheme::FixedFont);
+    m_keyboardScheme  = QGenericUnixTheme::themeHint(QPlatformTheme::KeyboardScheme).toInt();
     m_buttonBoxLayout = QGenericUnixTheme::themeHint(QPlatformTheme::DialogButtonBoxLayout).toInt();
-    
+
     if (families.contains(font)) {
-      m_font = QFont(font, font_size);
-      styles = QFontDatabase::styles(m_font.family());
-      if (styles.contains(font_style)) {
-        m_font.setStyleName(font_style);
-      }
+        m_font = QFont(font, font_size);
+        styles = QFontDatabase::styles(m_font.family());
+        if (styles.contains(font_style)) {
+            m_font.setStyleName(font_style);
+        }
     }
 
     if (families.contains(font_fixed)) {
-      m_fixedFont = QFont(font_fixed, font_fixed_size);
-      styles = QFontDatabase::styles(m_fixedFont.family());
-      if (styles.contains(font_fixed_style)) {
-        m_fixedFont.setStyleName(font_fixed_style);
-      }
+        m_fixedFont = QFont(font_fixed, font_fixed_size);
+        styles      = QFontDatabase::styles(m_fixedFont.family());
+        if (styles.contains(font_fixed_style)) {
+            m_fixedFont.setStyleName(font_fixed_style);
+        }
     }
 
     m_showShortcutsInContextMenus = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:shortcuts_for_context_menus");
-    m_showIconsInMenus = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:menus_have_icons");
-    m_toolButtonStyle = *g_pConfigManager->getValue<Hyprlang::INT>("misc:tool_button_style");
-    m_keyboardScheme = *g_pConfigManager->getValue<Hyprlang::INT>("misc:keyboard_scheme");
-    m_buttonBoxLayout = *g_pConfigManager->getValue<Hyprlang::INT>("misc:button_box_layout");
-    
+    m_showIconsInMenus            = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:menus_have_icons");
+    m_toolButtonStyle             = *g_pConfigManager->getValue<Hyprlang::INT>("misc:tool_button_style");
+    m_keyboardScheme              = *g_pConfigManager->getValue<Hyprlang::INT>("misc:keyboard_scheme");
+    m_buttonBoxLayout             = *g_pConfigManager->getValue<Hyprlang::INT>("misc:button_box_layout");
+
     // m_doubleClickInterval = QGenericUnixTheme::themeHint(QPlatformTheme::MouseDoubleClickInterval).toInt();
-       
+
     // m_cursorFlashTime = QGenericUnixTheme::themeHint(QPlatformTheme::CursorFlashTime).toInt();
-    
+
     // m_wheelScrollLines = QGenericUnixTheme::themeHint(QPlatformTheme::WheelScrollLines).toInt();
 
     //load style sheets
 #ifdef QT_WIDGETS_LIB
     QStringList qssPaths = QStringList(*g_pConfigManager->getValue<Hyprlang::STRING>("theme:style_sheet"));
-    m_userStyleSheet = loadStyleSheets(qssPaths);
+    m_userStyleSheet     = loadStyleSheets(qssPaths);
 #endif
 }
-
 
 #ifdef QT_WIDGETS_LIB
 bool CHyprPlatformTheme::hasWidgets() {

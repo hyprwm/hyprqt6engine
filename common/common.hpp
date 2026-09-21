@@ -48,7 +48,7 @@ class HYPR_EXPORT CHyprStyle {
         virtual void reloadSettings() = 0;
     };
 #if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
-    static bool isKColorScheme(const QString &filePath);
+    static bool isKColorScheme(const QString& filePath);
 #endif
     static std::optional<QPalette> loadColorScheme(const QString& filePath);
     static void                    registerStyleInstance(CStyleInstance* instance);

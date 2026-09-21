@@ -19,8 +19,8 @@
 QSet<CHyprStyle::CStyleInstance*> CHyprStyle::styleInstances;
 
 #if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
-bool CHyprStyle::isKColorScheme(const QString &filePath) {
-  return filePath.toLower().endsWith(".colors");
+bool CHyprStyle::isKColorScheme(const QString& filePath) {
+    return filePath.toLower().endsWith(".colors");
 }
 #endif
 

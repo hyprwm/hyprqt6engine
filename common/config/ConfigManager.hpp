@@ -7,8 +7,8 @@
 class CConfigManager {
   public:
     CConfigManager();
-    void init();
-    void refresh();
+    void               init();
+    void               refresh();
     static std::string getMainConfigPath();
 
     template <typename T>

@@ -16,19 +16,19 @@ CHyprProxyStyle::~CHyprProxyStyle() {
 }
 
 void CHyprProxyStyle::reloadSettings() {
-  g_pConfigManager->refresh();
-  m_dialogButtonsHaveIcons = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:dialog_have_icons");
-  m_activateItemOnSingleClick = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:single_click_activate");
-  m_underlineShortcut = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:shortcuts_for_context_menus");
-  QString style = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:style");
-  
-  if (style == "hypr-style"_L1 || !QStyleFactory::keys().contains(style, Qt::CaseInsensitive))
-    style = u"Fusion"_s;
+    g_pConfigManager->refresh();
+    m_dialogButtonsHaveIcons    = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:dialog_have_icons");
+    m_activateItemOnSingleClick = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:single_click_activate");
+    m_underlineShortcut         = !!*g_pConfigManager->getValue<Hyprlang::INT>("misc:shortcuts_for_context_menus");
+    QString style               = *g_pConfigManager->getValue<Hyprlang::STRING>("theme:style");
 
-  if (style != m_style) {
-    setBaseStyle(QStyleFactory::create(style) ?: new QCommonStyle);
-    m_style = style;
-  }
+    if (style == "hypr-style"_L1 || !QStyleFactory::keys().contains(style, Qt::CaseInsensitive))
+        style = u"Fusion"_s;
+
+    if (style != m_style) {
+        setBaseStyle(QStyleFactory::create(style) ?: new QCommonStyle);
+        m_style = style;
+    }
 }
 
 int CHyprProxyStyle::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const QWidget* widget, QStyleHintReturn* returnData) const {

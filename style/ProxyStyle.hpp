@@ -14,9 +14,10 @@ class CHyprProxyStyle : public QProxyStyle, public CHyprStyle::CStyleInstance {
     virtual ~CHyprProxyStyle();
 
     int styleHint(StyleHint hint, const QStyleOption* option, const QWidget* widget, QStyleHintReturn* returnData) const override;
+
   private:
     QString m_style;
-    bool m_dialogButtonsHaveIcons = true;
-    bool m_activateItemOnSingleClick = true;
-    bool m_underlineShortcut = true;
+    bool    m_dialogButtonsHaveIcons    = true;
+    bool    m_activateItemOnSingleClick = true;
+    bool    m_underlineShortcut         = true;
 };

@@ -46,7 +46,7 @@ void CConfigManager::init() {
 }
 
 void CConfigManager::refresh() {
-  auto result = m_config.parse();
-  if (result.error)
-    Debug::log(ERR, "Config has errors:\n{}\nProceeding ignoring faulty entries", result.getError());
+    auto result = m_config.parse();
+    if (result.error)
+        Debug::log(ERR, "Config has errors:\n{}\nProceeding ignoring faulty entries", result.getError());
 }
