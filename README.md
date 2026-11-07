@@ -4,7 +4,7 @@ QT6 Theme Provider for Hyprland. Compatible with KDE, replaces qt6ct.
 
 ### Configuration
 
-See the [wiki](https://wiki.hypr.land/Hypr-Ecosystem/hyprqt6engine/)
+See the [wiki](https://wiki.hypr.land/hypr-ecosystem/user/hyprtoolkit/)
 
 ### Building
 
