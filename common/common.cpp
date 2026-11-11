@@ -1,6 +1,6 @@
 #include <QDir>
 #include <QLocale>
-#include <QLatin1String>
+// #include <QLatin1String>
 #include <QStandardPaths>
 #include <QRegularExpression>
 #include <QFile>
@@ -18,13 +18,18 @@
 
 QSet<CHyprStyle::CStyleInstance*> CHyprStyle::styleInstances;
 
-//
+#if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
+bool CHyprStyle::isKColorScheme(const QString& filePath) {
+    return filePath.toLower().endsWith(".colors");
+}
+#endif
+
 std::optional<QPalette> CHyprStyle::loadColorScheme(const QString& filePath) {
     if (filePath.isEmpty())
         return std::nullopt;
 
 #if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
-    if (filePath.toLower().endsWith(".colors"))
+    if (isKColorScheme(filePath))
         return KColorScheme::createApplicationPalette(KSharedConfig::openConfig(filePath));
 #endif
 

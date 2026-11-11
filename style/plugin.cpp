@@ -7,7 +7,7 @@ class CHyprStylePlugin : public QStylePlugin {
 
   public:
     QStyle* create(const QString& key) override {
-        if (key == QLatin1String("hypr-style"))
+        if (key == "hypr-style"_L1)
             return new CHyprProxyStyle();
         return nullptr;
     }
